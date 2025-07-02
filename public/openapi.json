@@ -1,0 +1,147 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API PHP Template",
+        "description": "Uma API robusta e escalável construída com as melhores práticas do PHP moderno.",
+        "contact": {
+            "email": "admin@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8180/api",
+            "description": "Servidor de Desenvolvimento"
+        },
+        {
+            "url": "https://api.example.com",
+            "description": "Servidor de Produção"
+        }
+    ],
+    "paths": {
+        "/login": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Realiza o login do usuário",
+                "operationId": "b9e3bed89f6be94abc0e53bb59349719",
+                "requestBody": {
+                    "description": "Credenciais de login",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "login",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "login": {
+                                        "type": "string",
+                                        "example": "admin"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "admin"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login bem-sucedido, retorna token JWT"
+                    },
+                    "401": {
+                        "description": "Senha incorreta"
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado"
+                    }
+                }
+            }
+        },
+        "/auth/user/{id}": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Busca um usuário pelo ID",
+                "operationId": "b3ba384ef1d619be5ec0a4326d09cc26",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuário a ser buscado",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        },
+                        "example": "c255f364-50f7-11f0-92f8-4af298741892"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação bem-sucedida"
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado"
+                    },
+                    "401": {
+                        "description": "Não autorizado (token inválido ou ausente)"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/": {
+            "get": {
+                "tags": [
+                    "API"
+                ],
+                "summary": "Verifica o status da API",
+                "operationId": "7c9e975674d985a4c12d7d7336822f02",
+                "responses": {
+                    "200": {
+                        "description": "Api On"
+                    },
+                    "500": {
+                        "description": "Api with problem"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Insira o token JWT no formato 'Bearer {token}'",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Login",
+            "description": "Login"
+        },
+        {
+            "name": "User",
+            "description": "User"
+        },
+        {
+            "name": "API",
+            "description": "API"
+        }
+    ]
+}
