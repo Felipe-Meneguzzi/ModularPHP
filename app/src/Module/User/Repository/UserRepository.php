@@ -1,18 +1,20 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Module\User\Repository;
 
 use App\Core\DB\IDBConnection;
+use App\Core\Http\PaginationObject;
 use App\Entity\UserEntity;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Connection;
 
 interface IUserRepository {
-	public function getAll(): array;
-    public function getById(string $uuid): ?UserEntity;
-    public function create(UserEntity $userEntity): UserEntity;
-    public function update(UserEntity $userEntity): UserEntity;
-    public function delete(UserEntity $userEntity): void;
+	public function getAll(PaginationObject $pagination): array;
+    public function getById(string $uuid): ?Model;
+    public function create(Model $entity): Model;
+    public function update(Model $entity): Model;
+    public function delete(Model $entity): void;
 }
 
 class UserRepository implements IUserRepository {
@@ -24,28 +26,23 @@ class UserRepository implements IUserRepository {
         $this->entityClass = UserEntity::class;
 	}
 
-    public function getAll(): array {
-        $returnArray = [];
+    public function getAll(PaginationObject $pagination): array {
         $entity = new $this->entityClass;
         $entity->setConnection($this->db->getName());
 
-        $collection = $entity->get();
+        $query = $pagination->generateQueryFromPagination($entity);
 
-        foreach ($collection as $userEntity) {
-            $returnArray[] = $userEntity;
-        }
-
-        return $returnArray;
+        return $query->get()->toArray();
     }
 
-    public function getById(string $uuid): ?UserEntity {
+    public function getById(string $uuid): ?Model {
         $entity = new $this->entityClass;
         $entity->setConnection($this->db->getName());
 
         return $entity->where('uuid', $uuid)->first();
     }
 
-    public function create(UserEntity $entity): UserEntity {
+    public function create(Model $entity): Model {
         $entity->setConnection($this->db->getName());
 
         $entity->save();
@@ -53,7 +50,7 @@ class UserRepository implements IUserRepository {
         return $entity;
     }
 
-    public function update(UserEntity $entity): UserEntity {
+    public function update(Model $entity): Model {
         $entity->setConnection($this->db->getName());
         $entity->exists = true;
 
@@ -62,9 +59,10 @@ class UserRepository implements IUserRepository {
         return $entity;
     }
 
-    public function delete(UserEntity $entity): void {
+    public function delete(Model $entity): void {
         $entity->setConnection($this->db->getName());
 
         $entity->delete();
     }
+
 }

@@ -11,13 +11,13 @@ use OpenApi\Attributes as OA;
 class GetUserByIdController {
     #[OA\Get(
         path: '/auth/user/{uuid}',
-        summary: 'Busca um usuário pelo ID',
+        summary: 'Searches for a user by ID',
         security: [['bearerAuth' => []]],
         tags: ['User'],
         parameters: [
             new OA\Parameter(
                 name: 'uuid',
-                description: 'ID do usuário a ser buscado',
+                description: 'ID of the user to be searched',
                 in: 'path',
                 required: true,
                 schema: new OA\Schema(type: 'string', format: 'uuid'),
@@ -25,9 +25,9 @@ class GetUserByIdController {
             )
         ],
         responses: [
-            new OA\Response(response: 200, description: 'Operação bem-sucedida'),
-            new OA\Response(response: 404, description: 'Usuário não encontrado'),
-            new OA\Response(response: 401, description: 'Não autorizado (token inválido ou ausente)')
+            new OA\Response(response: 200, description: 'Successful operation'),
+            new OA\Response(response: 404, description: 'User not found'),
+            new OA\Response(response: 401, description: 'Unauthorized (invalid or missing token)')
         ]
     )]
     public function __construct(protected IGetUserByIdService $service) {}

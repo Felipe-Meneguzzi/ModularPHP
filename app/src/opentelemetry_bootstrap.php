@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 require_once '/app/vendor/autoload.php';
 
@@ -19,12 +19,12 @@ use OpenTelemetry\SemConv\ResourceAttributes;
 use OpenTelemetry\SDK\Common\Util\ShutdownHandler;
 
 /**
- * Inicializa o SDK do OpenTelemetry e o registra globalmente.
+ * Initializes the OpenTelemetry SDK and registers it globally.
  */
 function initialize_opentelemetry(): void
 {
     $resource = ResourceInfoFactory::defaultResource()->merge(ResourceInfo::create(Attributes::create([
-        ResourceAttributes::SERVICE_NAME => 'MyApp',
+        ResourceAttributes::SERVICE_NAME => 'api-php-template',
         ResourceAttributes::SERVICE_VERSION => '1.0.0',
     ])));
 
@@ -36,7 +36,7 @@ function initialize_opentelemetry(): void
     );
 
     $tracerProvider = new TracerProvider(
-        $spanProcessor, // Use a variável que acabamos de criar
+        $spanProcessor,
         new AlwaysOnSampler(),
         $resource
     );

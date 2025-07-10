@@ -69,7 +69,7 @@ The JWT payload contains information (claims) about the user and the token itsel
     "user_agent": "insomnia/11.0.1"
   },
   "iat": 1751396729,
-  "iss": "myapp.com.br",
+  "iss": "modularphp.com",
   "nbf": 1751396729,
   "exp": 1751425529
 }

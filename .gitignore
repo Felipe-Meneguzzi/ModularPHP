@@ -2,3 +2,4 @@
 vendor/
 .env
 *.key
+server-conf/

@@ -1,0 +1,27 @@
+<?php
+declare(strict_types = 1);
+
+namespace App\Module\\${NAME}\Service;
+
+use App\Module\\${NAME}\Repository\I${NAME}Repository;
+use App\Core\Exception\NotFoundException;
+
+interface IGetAll${NAME}Service {
+	public function run(): array;
+}
+
+class GetAll${NAME}Service implements IGetAll${NAME}Service {
+	public function __construct(protected I${NAME}Repository ${DS}repository) {}
+
+	public function run(): array {
+		${DS}entitiesArray = ${DS}this->repository->getAll();
+
+        if (!${DS}entitiesArray) {
+            throw new NotFoundException('${NAME}');
+        }
+
+        return [
+            'data' => ${DS}entitiesArray
+        ];
+	}
+}

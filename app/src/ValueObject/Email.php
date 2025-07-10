@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\ValueObject;
 
@@ -23,7 +23,7 @@ final readonly class Email implements Stringable {
 
     private static function validate(string $emailAddress): void {
         if (!filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
-            throw new AppException("Formato de e-mail inválido fornecido: '{$emailAddress}'", 400);
+            throw new AppException("Invalid email format provided: '{$emailAddress}'", 400);
         }
     }
 
@@ -40,14 +40,14 @@ final readonly class Email implements Stringable {
     }
 
     /**
-     * Retorna a parte local (antes do @) do e-mail.
+     * Returns the local part (before the @) of the email.
      */
     public function getLocalPart(): string {
         return explode('@', $this->value, 2)[0];
     }
 
     /**
-     * Retorna o domínio (depois do @) do e-mail.
+     * Returns the domain (after the @) of the email.
      */
     public function getDomain(): string {
         return explode('@', $this->value, 2)[1];

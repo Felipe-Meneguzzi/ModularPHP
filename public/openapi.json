@@ -10,7 +10,7 @@
     },
     "servers": [
         {
-            "url": "http://localhost:8180/api",
+            "url": "http://localhost:8080/api",
             "description": "Servidor de Desenvolvimento"
         },
         {

@@ -1,0 +1,51 @@
+<?php
+declare(strict_types = 1);
+
+namespace App\Module\\${NAME}\Service;
+
+use App\Core\Exception\NotFoundException;
+use App\Core\Exception\RequiredParamException;
+use App\Module\\${NAME}\Repository\I${NAME}Repository;
+
+interface IDelete${NAME}ByIdService {
+    #if (${UUID} != "")
+	public function run(string ${DS}uuid): array;
+    #end
+    #if (${UUID} == "")
+	public function run(string ${DS}id): array;
+    #end
+}
+
+class Delete${NAME}ByIdService implements IDelete${NAME}ByIdService {
+	public function __construct(protected I${NAME}Repository ${DS}repository) {}
+	
+    #if (${UUID} != "")
+	public function run(string ${DS}uuid): array {
+        
+        if(trim(${DS}uuid) === '') {
+            throw new RequiredParamException(['uuid']);
+        }
+
+        ${DS}entity = ${DS}this->repository->getByUUId(${DS}uuid);
+        #end
+     #if (${UUID} == "")
+     public function run(string ${DS}id): array {
+     
+        if(trim(${DS}id) === '') {
+            throw new RequiredParamException(['id']);
+        }
+
+        ${DS}entity = ${DS}this->repository->getById(${DS}id);
+        #end
+
+        if (!${DS}entity) {
+            throw new NotFoundException('${NAME}');
+        }
+
+        ${DS}this->repository->delete(${DS}entity);
+
+        return [
+            'message' => '${NAME} deleted'
+        ];
+	}
+}

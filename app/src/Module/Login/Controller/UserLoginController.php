@@ -12,9 +12,9 @@ use OpenApi\Attributes as OA;
 class UserLoginController {
     #[OA\Post(
         path: '/login',
-        summary: 'Realiza o login do usuário',
+        summary: 'Performs user login',
         requestBody: new OA\RequestBody(
-            description: 'Credenciais de login',
+            description: 'Login credentials',
             required: true,
             content: new OA\JsonContent(
                 required: ['login', 'password'],
@@ -26,9 +26,9 @@ class UserLoginController {
         ),
         tags: ['Login'],
         responses: [
-            new OA\Response(response: 200, description: 'Login bem-sucedido, retorna token JWT'),
-            new OA\Response(response: 401, description: 'Senha incorreta'),
-            new OA\Response(response: 404, description: 'Usuário não encontrado')
+            new OA\Response(response: 200, description: 'Login successful, returns JWT token'),
+            new OA\Response(response: 401, description: 'Incorrect password'),
+            new OA\Response(response: 404, description: 'User not found')
         ]
     )]
 	public function __construct(protected IUserLoginService $service) {}

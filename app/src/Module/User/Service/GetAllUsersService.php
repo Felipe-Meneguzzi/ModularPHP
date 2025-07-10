@@ -1,27 +1,28 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Module\User\Service;
 
+use App\Core\Http\PaginationObject;
 use App\Module\User\Repository\IUserRepository;
-use App\Core\Exception\NotFoundException;
 
 interface IGetAllUsersService {
-	public function run(): array;
+	public function run(array $paginationData): array;
 }
 
 class GetAllUsersService implements IGetAllUsersService {
 	public function __construct(protected IUserRepository $repository) {}
 
-	public function run(): array {
-		$entitiesArray = $this->repository->getAll();
+	public function run(array $paginationData): array {
+        $pagination = PaginationObject::fromArray($paginationData);
 
-        if (!$entitiesArray) {
-            throw new NotFoundException('Users');
-        }
+		$entitiesArray = $this->repository->getAll($pagination);
 
         return [
-            'data' => $entitiesArray
+            'data' => $entitiesArray,
+            'metadata' => [
+                'sent_pagination' => $pagination->toArray()
+            ]
         ];
 	}
 }

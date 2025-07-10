@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Module\User\Service;
 
@@ -22,20 +22,22 @@ class UpdateUserService implements IUpdateUserService {
         }
 
         $userData = [
-            'uuid' => $originalEntity->uuid,            //Não permitido atualizar
+            'uuid' => $originalEntity->uuid,            //Not allowed to update
             'name' => $iDTO['name'],
-            'login' => $originalEntity->login,          //Não permitido atualizar
-            'password' => $originalEntity->password,    //Não permitido atualizar
-            'email' => $originalEntity->email,          //Não permitido atualizar   
+            'login' => $originalEntity->login,          //Not allowed to update
+            'password' => $originalEntity->password,    //Not allowed to update
+            'email' => $originalEntity->email,          //Not allowed to update   
             'phone' => $iDTO['phone'],
             'user_type_uuid' => $iDTO['user_type_uuid'],
-            'cpf' => $iDTO['cpf']
+            'cpf' => $iDTO['cpf'],
+            'building_uuid' => $iDTO['building_uuid'],
+            'company_uuid' => $iDTO['company_uuid']
         ];
 
         $userData = UserValidator::validate($userData);
 
         $user = new UserEntity($userData);
-
+        
 		$updatedUser = $this->repository->update($user);
 
         $oDTO = [

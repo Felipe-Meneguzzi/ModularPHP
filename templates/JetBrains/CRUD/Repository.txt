@@ -1,0 +1,86 @@
+<?php
+declare(strict_types = 1);
+
+namespace App\Module\\${NAME}\Repository;
+
+use App\Core\DB\IDBConnection;
+use App\Entity\\${NAME}Entity;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Connection;
+
+interface I${NAME}Repository {
+	public function getAll(): array;
+	#if (${UUID} != "")
+    public function getByUUId(string ${DS}uuid): ?Model;
+    #end
+    #if (${UUID} == "")
+    public function getById(string ${DS}id): ?Model;
+    #end
+    public function create(Model ${DS}entity): Model;
+    public function update(Model ${DS}entity): Model;
+    public function delete(Model ${DS}entity): void;
+}
+
+class ${NAME}Repository implements I${NAME}Repository {
+	private Connection ${DS}db;
+    private string ${DS}entityClass;
+
+	public function __construct(protected IDBConnection ${DS}dbClass) {
+		${DS}this->db = ${DS}dbClass->getConnection();
+        ${DS}this->entityClass = ${NAME}Entity::class;
+	}
+
+    public function getAll(): array {
+        ${DS}returnArray = [];
+        ${DS}entity = new ${DS}this->entityClass;
+        ${DS}entity->setConnection(${DS}this->db->getName());
+
+        ${DS}collection = ${DS}entity->get();
+
+        foreach (${DS}collection as ${DS}dbEntity) {
+            ${DS}returnArray[] = ${DS}dbEntity;
+        }
+
+        return ${DS}returnArray;
+    }
+    
+    #if (${UUID} != "")
+    public function getByUUId(string ${DS}uuid): ?Model {
+        ${DS}entity = new ${DS}this->entityClass;
+        ${DS}entity->setConnection(${DS}this->db->getName());
+
+        return ${DS}entity->where('uuid', ${DS}uuid)->first();
+    }
+    #end
+    #if (${UUID} == "")
+    public function getById(string ${DS}id): ?Model {
+        ${DS}entity = new ${DS}this->entityClass;
+        ${DS}entity->setConnection(${DS}this->db->getName());
+
+        return ${DS}entity->where('id', ${DS}id)->first();
+    }
+    #end
+    
+    public function create(Model ${DS}entity): Model {
+        ${DS}entity->setConnection(${DS}this->db->getName());
+
+        ${DS}entity->save();
+
+        return ${DS}entity;
+    }
+
+    public function update(Model ${DS}entity): Model {
+        ${DS}entity->setConnection(${DS}this->db->getName());
+        ${DS}entity->exists = true;
+
+        ${DS}entity->save();
+
+        return ${DS}entity;
+    }
+
+    public function delete(Model ${DS}entity): void {
+        ${DS}entity->setConnection(${DS}this->db->getName());
+
+        ${DS}entity->delete();
+    }
+}

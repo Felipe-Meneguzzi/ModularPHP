@@ -26,10 +26,17 @@ RUN apt-get update && apt-get install -y \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Copia o arquivo de configuração do Apache
-COPY conf/apache-conf/000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY conf/apache-conf/sites-available /etc/apache2/sites-available
 
 # Habilitar módulos do Apache
 RUN a2enmod rewrite
+RUN a2enmod headers
+RUN a2enmod ssl
+
+
+RUN a2dissite 000-default.conf
+RUN a2ensite http-api-modularphp.conf
+
 
 # Configurar permissões
 RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
@@ -48,5 +55,5 @@ RUN chmod +x /usr/local/bin/wait-for-it
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["apache2-foreground"]
 
-# Expor a porta 80 para o Apache
-EXPOSE 80
+# Expor a porta 8080 para o Apache
+EXPOSE 8080

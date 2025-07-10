@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Core;
 
@@ -27,6 +27,18 @@ use App\Module\User\Service\IGetAllUsersService;
 use App\Module\User\Service\IGetUserByIdService;
 use App\Module\User\Service\IUpdateUserService;
 use App\Module\User\Service\UpdateUserService;
+use App\Module\UserType\Repository\IUserTypeRepository;
+use App\Module\UserType\Repository\UserTypeRepository;
+use App\Module\UserType\Service\CreateUserTypeService;
+use App\Module\UserType\Service\DeleteUserTypeByIdService;
+use App\Module\UserType\Service\GetAllUserTypesService;
+use App\Module\UserType\Service\GetUserTypeByIdService;
+use App\Module\UserType\Service\ICreateUserTypeService;
+use App\Module\UserType\Service\IDeleteUserTypeByIdService;
+use App\Module\UserType\Service\IGetAllUserTypesService;
+use App\Module\UserType\Service\IGetUserTypeByIdService;
+use App\Module\UserType\Service\IUpdateUserTypeService;
+use App\Module\UserType\Service\UpdateUserTypeService;
 use DI\Container;
 use DI\ContainerBuilder;
 use function DI\autowire;
@@ -36,17 +48,31 @@ class AppDIContainer {
 		$builder = new ContainerBuilder();
 
 		$builder->addDefinitions([
-			IUserLoginService::class => autowire(UserLoginService::class),
-			IUserLoginRepository::class => autowire(UserLoginRepository::class),
+            //RequestLog Module
             IRequestLogService::class => autowire(RequestLogService::class),
             IRequestLogRepository::class => autowire(RequestLogRepository::class),
-            IGetAllUsersService::class => autowire(GetAllUsersService::class),
-            IUserRepository::class => autowire(UserRepository::class),
-            IGetUserByIdService::class => autowire(GetUserByIdService::class),
+
+            //Login Module
+			IUserLoginService::class => autowire(UserLoginService::class),
+			IUserLoginRepository::class => autowire(UserLoginRepository::class),
             IAuthenticateService::class => autowire(AuthenticateService::class),
+
+            //User Module
+            IUserRepository::class => autowire(UserRepository::class),
+            IGetAllUsersService::class => autowire(GetAllUsersService::class),
+            IGetUserByIdService::class => autowire(GetUserByIdService::class),
             ICreateUserService::class =>  autowire(CreateUserService::class),
             IUpdateUserService::class =>  autowire(UpdateUserService::class),
             IDeleteUserByIdService::class =>  autowire(DeleteUserByIdService::class),
+
+            //UserType Module
+            IUserTypeRepository::class => autowire(UserTypeRepository::class),
+            IGetAllUserTypesService::class => autowire(GetAllUserTypesService::class),
+            IGetUserTypeByIdService::class => autowire(GetUserTypeByIdService::class),
+            ICreateUserTypeService::class =>  autowire(CreateUserTypeService::class),
+            IUpdateUserTypeService::class =>  autowire(UpdateUserTypeService::class),
+            IDeleteUserTypeByIdService::class =>  autowire(DeleteUserTypeByIdService::class),
+
 		]);
 
         /********************************************************DATABASE********************************************************/

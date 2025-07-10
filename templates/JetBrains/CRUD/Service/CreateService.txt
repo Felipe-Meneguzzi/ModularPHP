@@ -1,0 +1,54 @@
+<?php
+declare(strict_types = 1);
+
+namespace App\Module\\${NAME}\Service;
+
+use App\Core\Exception\AppException;
+use App\Entity\\${NAME}Entity;
+use App\Module\\${NAME}\Repository\I${NAME}Repository;
+use App\Module\\${NAME}\Validator\\${NAME}Validator;
+#if (${UUID} != "")
+use Ramsey\Uuid\Uuid;
+#end
+
+interface ICreate${NAME}Service {
+	public function run(array ${DS}iDTO): array;
+}
+
+class Create${NAME}Service implements ICreate${NAME}Service {
+	public function __construct(protected I${NAME}Repository ${DS}repository) {}
+
+	public function run(array ${DS}iDTO): array {
+        ${DS}entityData = ${NAME}Validator::validate(${DS}iDTO);
+        
+
+        #if (${UUID} != "")
+        ${DS}uuid = Uuid::uuid4()->toString();
+        ${DS}entityData['uuid'] = ${DS}uuid;
+        #end
+
+
+        ${DS}entity = new ${NAME}Entity(${DS}entityData);
+
+        try {
+            ${DS}createdEntity = ${DS}this->repository->create(${DS}entity);
+        } catch (\PDOException ${DS}e) {
+            if (${DS}e->getCode() === '23000' && str_contains(${DS}e->getMessage(), 'Duplicate entry')) {
+                preg_match("/Duplicate entry '(.*?)' for key '(.*?)'/", ${DS}e->getMessage(), ${DS}matches);
+                ${DS}duplicateValue = ${DS}matches[1] ?? 'unknown';
+                throw new AppException("Duplicate entry for '{${DS}duplicateValue}'. Please choose a different value.", 409);
+            }
+            throw new AppException('Error creating ${NAME}: ' . ${DS}e->getMessage(), 400);
+        }
+		
+        ${DS}oDTO = [
+            ${DS}createdEntity
+        ];
+
+        return [
+            'statusCode' => 201,
+            'data' => ${DS}oDTO,
+            'message' => '${NAME} created'
+        ];
+	}
+}

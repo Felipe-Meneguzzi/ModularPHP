@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\ValueObject;
 
@@ -23,7 +23,7 @@ final readonly class CPF implements Stringable {
 
     private static function validate(string $cpf): void {
         if (!self::isValidCPF($cpf)) {
-            throw new AppException("CPF inválido fornecido: '{$cpf}'", 400);
+            throw new AppException("Invalid CPF given: '{$cpf}'", 400);
         }
     }
 
@@ -32,12 +32,12 @@ final readonly class CPF implements Stringable {
     }
 
     private static function isValidCPF(string $cpf): bool {
-        // CPF precisa ter exatamente 11 dígitos.
+        // CPF must have exactly 11 digits.
         if (strlen($cpf) !== 11 || preg_match('/(\d)\1{10}/', $cpf)) {
             return false;
         }
 
-        // Validação dos dígitos verificadores.
+        // Validation of verifier digits.
         for ($t = 9; $t < 11; $t++) {
             $d = 0;
             for ($c = 0; $c < $t; $c++) {
@@ -61,9 +61,9 @@ final readonly class CPF implements Stringable {
     }
 
     /**
-     * Retorna o CPF formatado no formato padrão (###.###.###-##).
+     * Returns the formatted CPF in the default format (###.###.###-##).
      */
     public function getFormatted(): string {
-        return vsprintf('%s.%s.%s-%s', str_split($this->value, [3, 3, 3, 2]));
+        return vsprintf('%s.%s.%s-%s', str_split($this->value));
     }
 }

@@ -1,0 +1,19 @@
+<?php
+declare(strict_types = 1);
+
+namespace App\Module\\${NAME}\Controller;
+
+use App\Core\Http\DefaultResponse;
+use App\Core\Http\HttpRequest;
+use App\Module\\${NAME}\Service\IGetAll${NAME}Service;
+
+class GetAll${NAME}Controller {
+	public function __construct(protected IGetAll${NAME}Service ${DS}service) {}
+
+	public function run(HTTPRequest ${DS}request): DefaultResponse {
+		${DS}serviceResponse = ${DS}this->service->run();
+
+        return DefaultResponse::getDefaultResponse(${DS}serviceResponse);
+	}
+
+}

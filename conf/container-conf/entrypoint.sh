@@ -3,7 +3,7 @@ set -e
 
 INIT_FILE="/usr/local/bin/.initialized"
 
-/usr/local/bin/wait-for-it myapp-mysql:3306 --timeout=30 -- echo "MySQL está disponível!"
+/usr/local/bin/wait-for-it modularphp-mysql:3306 --timeout=60 -- echo "MySQL está disponível!"
 
 if [ ! -f "$INIT_FILE" ]; then
   echo "Primeira inicialização detectada..."

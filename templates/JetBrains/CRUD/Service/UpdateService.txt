@@ -1,0 +1,57 @@
+<?php
+declare(strict_types = 1);
+
+namespace App\Module\\${NAME}\Service;
+
+use App\Core\Exception\NotFoundException;
+use App\Entity\\${NAME}Entity;
+use App\Module\\${NAME}\Repository\I${NAME}Repository;
+use App\Module\\${NAME}\Validator\\${NAME}Validator;
+
+interface IUpdate${NAME}Service {
+	public function run(array ${DS}iDTO): array;
+}
+
+class Update${NAME}Service implements IUpdate${NAME}Service {
+	public function __construct(protected I${NAME}Repository ${DS}repository) {}
+
+	public function run(array ${DS}iDTO): array {
+	    #if (${UUID} != "")
+        ${DS}originalEntity = ${DS}this->repository->getByUUId(${DS}iDTO['uuid']);
+        if (!${DS}originalEntity) {
+            throw new NotFoundException('${NAME}');
+        }
+
+        ${DS}entityData = [
+            'uuid' => ${DS}originalEntity->uuid,            //Não permitido atualizar
+            // 'name' => ${DS}iDTO['name'],
+        ];
+        #end
+        #if (${UUID} == "")
+        ${DS}originalEntity = ${DS}this->repository->getById(${DS}iDTO['id']);
+        if (!${DS}originalEntity) {
+            throw new NotFoundException('${NAME}');
+        }
+
+        ${DS}entityData = [
+            'id' => ${DS}originalEntity->id,              //Não permitido atualizar
+            // 'name' => ${DS}iDTO['name'],
+        ];
+        #end
+        
+        ${DS}entityData = ${NAME}Validator::validate(${DS}entityData);
+
+        ${DS}entity = new ${NAME}Entity(${DS}entityData);
+        
+		${DS}updatedEntity = ${DS}this->repository->update(${DS}entity);
+
+        ${DS}oDTO = [
+            ${DS}updatedEntity
+        ];
+
+        return [
+            'data' => ${DS}oDTO,
+            'message' => '${NAME} updated'
+        ];
+	}
+}

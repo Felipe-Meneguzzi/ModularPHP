@@ -32,25 +32,25 @@ O `docker-compose.yml` orquestra os serviços da aplicação. Ele define os segu
 ### Serviço `app`
 
 -   **`build`**: Constrói a imagem da aplicação a partir do `Dockerfile` no contexto do projeto.
--   **`container_name`**: Define o nome do container como `myapp-app`.
+-   **`container_name`**: Define o nome do container como `modularphp-api`.
 -   **`volumes`**: Mapeia os seguintes diretórios:
     -   `./app:/app`: Mapeia o diretório `app` local para o diretório `/app` no container.
     -   `./public:/var/www/html/public`: Mapeia o diretório `public` local para o diretório `/var/www/html/public` no container.
     -   `./conf/db-conf:/etc/db-conf`: Mapeia o diretório de configuração do banco de dados para o container.
 -   **`networks`**: Conecta o container à rede `application-network`.
--   **`ports`**: Mapeia a porta `8180` do host para a porta `80` do container.
+-   **`ports`**: Mapeia a porta `8080` do host para a porta `80` do container.
 -   **`working_dir`**: Define o diretório de trabalho como `/app`.
 
 ### Serviço `mysql`
 
 -   **`image`**: Utiliza a imagem `mysql:8.1.0`.
--   **`container_name`**: Define o nome do container como `myapp-mysql`.
+-   **`container_name`**: Define o nome do container como `modularphp-mysql`.
 -   **`environment`**: Define as variáveis de ambiente para o banco de dados.
 -   **`volumes`**: Mapeia os seguintes diretórios:
     -   `mysql_data:/var/lib/mysql`: Cria um volume nomeado para persistir os dados do banco de dados.
     -   `./conf/db-conf:/etc/db-conf`: Mapeia o diretório de configuração do banco de dados para o container.
 -   **`networks`**: Conecta o container à rede `application-network`.
--   **`ports`**: Mapeia a porta `3316` do host para a porta `3306` do container.
+-   **`ports`**: Mapeia a porta `3306` do host para a porta `3306` do container.
 
 ### Redes e Volumes
 

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Middleware;
 
@@ -10,8 +10,16 @@ class AuthenticateMiddleware {
     public function __construct(protected IAuthenticateService $service) {}
 
     public function handle(HTTPRequest $request, callable $next) {
-        $token = $request->headers['Authorization'] ?? '';
-
+        // Check if the Authorization header is present
+        if (isset($request->headers['Authorization'])) {
+            $token = $request->headers['Authorization'];
+        }
+        else if (isset($request->headers['authorization'])) {
+            $token = $request->headers['authorization'];
+        }
+        else {
+            $token = '';
+        } 
         $this->service->run($token);
 
         return $next($request);

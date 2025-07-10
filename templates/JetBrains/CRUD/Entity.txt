@@ -1,0 +1,32 @@
+<?php
+declare(strict_types = 1);
+#parse("PHP File Header.php")
+
+namespace App\Entity;
+
+use Illuminate\Database\Eloquent\Model;
+
+class ${NAME}Entity extends Model {
+    protected ${DS}table = '${TABLE}';
+    #if (${UUID} != "")
+    protected ${DS}primaryKey = 'uuid';
+    public ${DS}incrementing = false;
+    #end
+
+    protected ${DS}hidden = [
+    ];
+
+    protected ${DS}fillable = [
+        #if (${UUID} != "")
+        'uuid',
+        #end
+    ];
+
+    protected ${DS}casts = [
+        #if (${UUID} != "")
+        'uuid' => 'string',
+        #end
+    ];
+
+    public ${DS}timestamps = false;
+}

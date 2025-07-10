@@ -18,7 +18,9 @@ class CreateUserController {
             'email' => $request->body['email'] ?? null,
             'phone' => $request->body['phone'] ?? null,
             'user_type_uuid' => $request->body['user_type_uuid'] ?? null,
-            'cpf' => $request->body['cpf'] ?? null
+            'cpf' => $request->body['cpf'] ?? null,
+            'building_uuid' => $request->body['building_uuid'] ?? null,
+            'company_uuid' => $request->body['company_uuid'] ?? null
         ];
 
 		$serviceResponse = $this->service->run($iDTO);

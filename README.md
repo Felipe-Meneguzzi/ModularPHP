@@ -1,4 +1,4 @@
-# PHP API Template
+# ModularPHP
 
 This repository serves as a robust and scalable template for building new APIs in PHP. It is designed with a modular architecture and good development practices to ensure that your project starts with a solid, secure, and easily maintainable foundation.
 
@@ -34,8 +34,8 @@ Follow the steps below to set up and run the project locally.
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/felipe-meneguzzi/myapp-backend.git
-    cd myapp-backend
+    git clone https://github.com/felipe-meneguzzi/modularphp.git
+    cd ModularPHP
     ```
 
 2.  **Generate the Security Keys (Required):**
@@ -58,8 +58,8 @@ Follow the steps below to set up and run the project locally.
     ```bash
     docker-compose up -d --build
     ```
-    -   **API**: `http://localhost:8180`
-    -   **MySQL**: `localhost:3316`
+    -   **API**: `http://localhost:8080`
+    -   **MySQL**: `localhost:3306`
     -   **Grafana**: `http://localhost:3000` (user: `admin`, pass: `admin`)
     -   **Prometheus**: `http://localhost:9190`
 

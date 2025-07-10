@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App;
 
@@ -11,22 +11,22 @@ use OpenApi\Attributes as OA;
 
 #[OA\Info(
     version: '1.0.0',
-    description: 'Uma API robusta e escalável construída com as melhores práticas do PHP moderno.',
-    title: 'API PHP Template',
+    description: 'A robust and scalable API built with modern PHP best practices.',
+    title: 'PHP API Template',
     contact: new OA\Contact(email: 'admin@gmail.com')
 )]
 #[OA\Server(
-    url: 'http://localhost:8180/api',
-    description: 'Servidor de Desenvolvimento'
+    url: 'http://localhost:8080/api',
+    description: 'Development Server'
 )]
 #[OA\Server(
     url: 'https://api.example.com',
-    description: 'Servidor de Produção'
+    description: 'Production Server'
 )]
 #[OA\SecurityScheme(
     securityScheme: 'bearerAuth',
     type: 'http',
-    description: "Insira o token JWT no formato 'Bearer {token}'",
+    description: "Insert JWT token in 'Bearer {token}' format",
     bearerFormat: 'JWT',
     scheme: 'bearer'
 )]
@@ -102,34 +102,34 @@ class Router {
         $method = strtoupper($this->request->method);
         $uri = parse_url($this->request->uri, PHP_URL_PATH);
 
-        // Normaliza a URI removendo a barra final, se houver,
-        // mas não mexe na rota raiz "/".
+        // Normalizes the URI by removing the trailing slash, if any,
+        // but does not touch the root route "/".
         if (strlen($uri) > 1) {
             $uri = rtrim($uri, '/');
         }
 
         foreach ($this->routes[$method] ?? [] as $routeUri => $route) {
-            // 1. Regex mais poderosa para encontrar parâmetros e suas regras customizadas
-            // Ex: para /user/{id:\d+}, $matches[0][1] será 'id' e $matches[0][2] será '\d+'
+            // 1. More powerful regex to find parameters and their custom rules
+            // Ex: for /user/{id:\d+}, $matches[0][1] will be 'id' and $matches[0][2] will be '\d+'
             preg_match_all('/\{([a-zA-Z0-9_-]+)(?::([^\}]+))?\}/', $routeUri, $matches, PREG_SET_ORDER);
 
             $paramKeys = [];
             $pattern = $routeUri;
 
-            // 2. Loop para construir o padrão regex final
+            // 2. Loop to build the final regex pattern
             foreach ($matches as $match) {
                 $placeholder = $match[0]; // O placeholder completo, ex: {id:\d+}
                 $keyName     = $match[1]; // O nome da chave, ex: id
 
-                // Se uma regex customizada foi definida (match[2]), use-a.
-                // Caso contrário, use o padrão default.
+                // If a custom regex was defined (match[2]), use it.
+                // Otherwise, use the default pattern.
                 $customRegex = $match[2] ?? '[a-zA-Z0-9_-]+';
 
                 $paramKeys[] = $keyName;
 
-                // 3. Substitui o placeholder pela regex de captura na string do padrão
-                // Atenção ao uso de preg_quote para o placeholder, garantindo que os '{' e '}'
-                // sejam tratados como texto literal na substituição.
+                // 3. Replaces the placeholder with the capture regex in the pattern string
+                // Pay attention to the use of preg_quote for the placeholder, ensuring that '{' and '}'
+                // are treated as literal text in the replacement.
                 $pattern = str_replace($placeholder, "($customRegex)", $pattern);
             }
 
@@ -139,11 +139,11 @@ class Router {
                 array_shift($matches); // Remove o primeiro elemento que é a string completa da URL
 
                 if (count($paramKeys) !== count($matches)) {
-                    //todo LOG AQUI DE ERRO
+                    //todo LOG HERE FOR ERROR
                     continue;
                 }
 
-                // Combina as chaves extraídas com os valores correspondentes
+                // Combines the extracted keys with the corresponding values
                 // Se houver mais valores do que chaves (ou vice-versa), array_combine lidará com isso
                 $this->request->dynamicParams = array_combine($paramKeys, $matches);
 
@@ -155,34 +155,34 @@ class Router {
     }
 
     protected function executePipeline(array|callable $handler, array $middlewares, array $controllerParams): DefaultResponse {
-        // O "núcleo" da cebola/pipeline: a ação final que chama o controller.
+        // The "core" of the onion/pipeline: the final action that calls the controller.
         $coreAction = function (HTTPRequest $request) use ($handler, $controllerParams) {
             return $this->callAction($handler, $controllerParams);
         };
 
-        // Invertemos o array de middlewares para construir a cadeia de fora para dentro.
+        // We reverse the middleware array to build the chain from outside in.
         $reversedMiddleware = array_reverse($middlewares);
 
-        // Usamos array_reduce para envolver cada camada da cebola na anterior.
+        // We use array_reduce to wrap each layer of the onion in the previous one.
         $pipeline = array_reduce(
             $reversedMiddleware,
             function ($next, $middlewareClass) {
-                // Cria uma nova função que chama o handle do middleware atual,
-                // passando a próxima camada ($next) como seu callable.
+                // Creates a new function that calls the handle of the current middleware,
+                // passing the next layer ($next) as its callable.
                 return function (HTTPRequest $request) use ($middlewareClass, $next) {
                     $middlewareInstance = $this->container->get($middlewareClass);
                     return $middlewareInstance->handle($request, $next);
                 };
             },
-            $coreAction // O valor inicial é a chamada do nosso controller.
+            $coreAction // The initial value is the call to our controller.
         );
 
-        // Executa a cadeia de middlewares completa, começando pela camada mais externa.
+        // Executes the complete middleware chain, starting from the outermost layer.
         return call_user_func($pipeline, $this->request);
     }
 
     protected function callAction($handler, array $params = []): DefaultResponse {
-        // Verifica se o handler é o array [classe, método]
+        // Checks if the handler is the [class, method] array
         if (is_array($handler) && count($handler) === 2) {
             [$controllerClass, $method] = $handler;
 
@@ -195,7 +195,7 @@ class Router {
             }
         }
 
-        // Se o handler for uma Closure/função anônima
+        // If the handler is a Closure/anonymous function
         if (is_callable($handler)) {
             return $handler($this->request, $params);
         }

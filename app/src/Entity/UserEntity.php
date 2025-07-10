@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Entity;
 
@@ -10,7 +10,9 @@ class UserEntity extends Model{
     protected $primaryKey = 'uuid';
 
     protected $hidden = [
-        'password'
+        'password',
+        'created_at',
+        'updated_at'
     ];
 
     protected $fillable = [
@@ -21,14 +23,23 @@ class UserEntity extends Model{
         'email',
         'phone',
         'user_type_uuid',
-        'cpf'
+        'cpf',
+        'building_uuid',
+        'company_uuid'
     ];
 
     protected $casts = [
         'uuid' => 'string'
     ];
 
-    public $timestamps = true;
+    public array $searchIgnore = [
+        'uuid',
+        'user_type_uuid',
+        'building_uuid',
+        'company_uuid'
+    ];
+
+    public $timestamps = false;
 
     public $incrementing = false;
 

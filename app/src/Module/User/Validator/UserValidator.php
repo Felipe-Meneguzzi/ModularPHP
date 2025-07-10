@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Module\User\Validator;
 
@@ -7,6 +7,7 @@ use App\ValueObject\Email;
 use App\ValueObject\Phone;
 use App\ValueObject\CPF;
 use App\Core\Exception\AppStackException;
+use Throwable;
 
 final class UserValidator {
 
@@ -14,7 +15,7 @@ final class UserValidator {
         $errors = [];
 
         /***************************************************************************************************/
-        /****************************************CAMPOS OBRIGATÓRIOS****************************************/
+        /*****************************************REQUIRED FIELDS*******************************************/
         /***************************************************************************************************/
         if (empty($iDTO['name'])) {
             $errors[] = "'name' is required";
@@ -30,6 +31,13 @@ final class UserValidator {
 
         if (empty($iDTO['email'])) {
             $errors[] = "'email' is required";
+        } else {
+            try {
+                Email::fromString($iDTO['email']);
+                $iDTO['email'] = Email::fromString($iDTO['email'])->__toString();
+            } catch (Throwable $e) {
+                $errors[] = $e->getMessage();
+            }
         }
 
         if (empty($iDTO['user_type_uuid'])) {
@@ -38,37 +46,28 @@ final class UserValidator {
 
         if (empty($iDTO['cpf'])) {
             $errors[] = "'cpf' is required";
+        } else {
+            try {
+                CPF::fromString($iDTO['cpf']);
+                $iDTO['cpf'] = CPF::fromString($iDTO['cpf'])->__toString();
+            } catch (Throwable $e) {
+                $errors[] = $e->getMessage();
+            }
         }
         /***************************************************************************************************/
         /***************************************************************************************************/
         /***************************************************************************************************/
-
-
-        try {
-            Email::fromString($iDTO['email']);
-            $iDTO['email'] = Email::fromString($iDTO['email'])->__toString();
-        } catch (\Throwable $e) {
-            $errors[] = $e->getMessage();
-        }
 
 
         if (!empty($iDTO['phone'])) {
             try {
                 Phone::fromString($iDTO['phone']);
                 $iDTO['phone'] = Phone::fromString($iDTO['phone'])->__toString();
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $errors[] = $e->getMessage();
             }
         }
-
-
-        try {
-            CPF::fromString($iDTO['cpf']);
-            $iDTO['cpf'] = CPF::fromString($iDTO['cpf'])->__toString();
-        } catch (\Throwable $e) {
-            $errors[] = $e->getMessage();
-        }
-        
+    
 
         
         if (!empty($errors)) {

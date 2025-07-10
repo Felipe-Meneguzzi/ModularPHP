@@ -9,6 +9,7 @@ use App\Core\Exception\AppException;
 use App\Core\Exception\AppStackException;
 use App\Core\Http\DefaultResponse;
 use App\Core\Http\HTTPRequest;
+use App\Core\Exception\PaginationStackException;
 use App\Router;
 use Dotenv\Dotenv;
 use OpenTelemetry\API\Globals;
@@ -27,16 +28,41 @@ try {
 
     $container = AppDIContainer::build();
 
-    /********************************************************************************************************************/
-    /*************************************************CORS***************************************************************/
-
-    header("Access-Control-Allow-Origin: *");
-    header("Access-Control-Allow-Headers: *");
-    header("Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS");
-    date_default_timezone_set('America/Sao_Paulo');
 
     /********************************************************************************************************************/
+    /*****************************************************CORS***********************************************************/
+
+    header_remove("Access-Control-Allow-Origin");
+
+    $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+    $allowed_origins = [
+        'https://modularphp.com',
+        'https://dev.modularphp.com',
+        'https://api.modularphp.com',
+        'https://dashboard.modularphp.com'
+    ];
+
+    if (in_array($origin, $allowed_origins)) {
+        header("Access-Control-Allow-Origin: $origin");
+        header("Vary: Origin");
+    }
+
+    if ($_ENV['ENVIRONMENT'] === 'dev') {
+        header_remove("Access-Control-Allow-Origin");
+        header("Access-Control-Allow-Origin: *");
+    }
+
+    header("Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE, PATCH");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        http_response_code(204);
+        exit;
+    }
+
     /********************************************************************************************************************/
+    /********************************************************************************************************************/
+
 
 
     /********************************************************************************************************************/
@@ -62,6 +88,7 @@ try {
     /********************************************************************************************************************/
     /********************************************************************************************************************/
 
+
     $router = new Router($request, $container);
     $routeDefiner = require '/app/src/Api.php';
     $routeDefiner($router, $container);
@@ -76,6 +103,12 @@ try {
     $response = new DefaultResponse(statusCode: 401, message: 'JWTToken Authorization ERROR', errors: [$jwtException->getMessage()]);
     if(isset($rootSpan))
         $rootSpan->setStatus('Ok', '401- JWTToken Authorization ERROR: ' . $jwtException->getMessage() ?? '');
+
+}  catch (PaginationStackException $paginationException) {
+
+    $response = new DefaultResponse(statusCode: 400, message: 'Pagination parameter ERROR', errors: [$paginationException->getMessage()]);
+    if(isset($rootSpan))
+        $rootSpan->setStatus('Ok', '400- Pagination parameter ERROR: ' . $paginationException->getMessage() ?? '');
 
 } catch (AppStackException $appStackException) {
 

@@ -1,0 +1,23 @@
+<?php
+declare(strict_types = 1);
+
+namespace App\Module\\${NAME}\Controller;
+
+use App\Core\Http\DefaultResponse;
+use App\Core\Http\HttpRequest;
+use App\Module\\${NAME}\Service\ICreate${NAME}Service;
+
+class Create${NAME}Controller {
+    public function __construct(protected ICreate${NAME}Service ${DS}service) {}
+
+	public function run(HTTPRequest ${DS}request): DefaultResponse {
+        ${DS}iDTO = [
+            // 'name' => ${DS}request->body['name'] ?? null,
+        ];
+
+		${DS}serviceResponse = ${DS}this->service->run(${DS}iDTO);
+
+        return DefaultResponse::getDefaultResponse(${DS}serviceResponse);
+	}
+
+}

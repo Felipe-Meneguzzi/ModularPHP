@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Middleware;
 
@@ -19,7 +19,7 @@ class RequestLogMiddleware {
             'body' => $request->body ?? ['Unknown'],
             'cookies' => $request->cookies ?? ['Unknown'],
             'agent' => $request->userAgent ?? 'Unknown',
-            'time' => $request->requestTime['data'].' '.$request->requestTime['hora'] ?? 'Unknown',
+            'time' => $request->requestTime['date'].' '.$request->requestTime['time'] ?? 'Unknown',
             'ip' => $request->requestIP ?? 'Unknown',
         ];
 

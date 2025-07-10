@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\ValueObject;
 
@@ -22,7 +22,7 @@ final readonly class Phone implements Stringable {
         
         if (strlen($cleanPhone) !== 13) {
             throw new AppException(
-                "Telefone deve ter exatamente 13 dígitos. Recebido: {$cleanPhone} (" . strlen($cleanPhone) . " dígitos)",
+                "Phone must have exactly 13 digits. Received: {$cleanPhone} (" . strlen($cleanPhone) . " digits)",
                 400
             );
         }

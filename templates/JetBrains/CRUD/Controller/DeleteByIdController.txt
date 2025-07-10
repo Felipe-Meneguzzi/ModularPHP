@@ -1,0 +1,28 @@
+<?php
+declare(strict_types = 1);
+
+namespace App\Module\\${NAME}\Controller;
+
+use App\Core\Http\DefaultResponse;
+use App\Core\Http\HttpRequest;
+use App\Module\\${NAME}\Service\IDelete${NAME}ByIdService;
+
+class Delete${NAME}ByIdController {
+    public function __construct(protected IDelete${NAME}ByIdService ${DS}service) {}
+
+	public function run(HTTPRequest ${DS}request): DefaultResponse {
+        #if (${UUID} != "")
+        ${DS}uuid = ${DS}request->dynamicParams['uuid'] ?? '';
+
+		${DS}serviceResponse = ${DS}this->service->run(${DS}uuid);
+        #end
+        #if (${UUID} == "")
+        ${DS}id = ${DS}request->dynamicParams['id'] ?? '';
+
+		${DS}serviceResponse = ${DS}this->service->run(${DS}id);
+        #end
+
+        return DefaultResponse::getDefaultResponse(${DS}serviceResponse);
+	}
+
+}

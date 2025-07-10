@@ -32,25 +32,25 @@ The `docker-compose.yml` file orchestrates the application's services. It define
 ### `app` Service
 
 -   **`build`**: Builds the application image from the `Dockerfile` in the project's context.
--   **`container_name`**: Sets the container name to `myapp-app`.
+-   **`container_name`**: Sets the container name to `modularphp-api`.
 -   **`volumes`**: Maps the following directories:
     -   `./app:/app`: Maps the local `app` directory to the `/app` directory in the container.
     -   `./public:/var/www/html/public`: Maps the local `public` directory to the `/var/www/html/public` directory in the container.
     -   `./conf/db-conf:/etc/db-conf`: Maps the database configuration directory to the container.
 -   **`networks`**: Connects the container to the `application-network` network.
--   **`ports`**: Maps port `8180` of the host to port `80` of the container.
+-   **`ports`**: Maps port `8080` of the host to port `80` of the container.
 -   **`working_dir`**: Sets the working directory to `/app`.
 
 ### `mysql` Service
 
 -   **`image`**: Uses the `mysql:8.1.0` image.
--   **`container_name`**: Sets the container name to `myapp-mysql`.
+-   **`container_name`**: Sets the container name to `modularphp-mysql`.
 -   **`environment`**: Sets the environment variables for the database.
 -   **`volumes`**: Maps the following directories:
     -   `mysql_data:/var/lib/mysql`: Creates a named volume to persist the database data.
     -   `./conf/db-conf:/etc/db-conf`: Maps the database configuration directory to the container.
 -   **`networks`**: Connects the container to the `application-network` network.
--   **`ports`**: Maps port `3316` of the host to port `3306` of the container.
+-   **`ports`**: Maps port `3306` of the host to port `3306` of the container.
 
 ### Networks and Volumes
 

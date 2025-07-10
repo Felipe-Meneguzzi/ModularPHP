@@ -2,7 +2,6 @@
 
 namespace App\Core\Http;
 
-use App\Core\ObjectCore;
 use DateTime;
 use DateTimeZone;
 
@@ -26,6 +25,7 @@ class HTTPRequest {
         $this->method = $_SERVER['REQUEST_METHOD'] ?? 'Unknown';
         $this->headers = function_exists('getallheaders') ? getallheaders() : [];
         $this->queryParams = $_GET;
+        unset($this->queryParams["path"]);
         $this->path = explode('/', trim($this->queryParams['path'] ?? '', '/'));
         $this->body = json_decode(file_get_contents('php://input'), true) ?? [];
         $this->cookies = $_COOKIE ?? [];
@@ -51,8 +51,8 @@ class HTTPRequest {
             $dateTime = new DateTime("@$requestTime");
             $dateTime->setTimezone(new DateTimeZone('America/Sao_Paulo'));
             return [
-                'data' => $dateTime->format('d/m/Y'),
-                'hora' => $dateTime->format('H:i:s'),
+                'date' => $dateTime->format('d/m/Y'),
+                'time' => $dateTime->format('H:i:s'),
             ];
         } catch (\Exception $e) {
             return [

@@ -35,15 +35,15 @@ class CreateRequestLogsTable extends AbstractMigration
                 'limit' => \Phinx\Db\Adapter\MysqlAdapter::TEXT_LONG,
                 'null' => true
             ])
-            ->addColumn('agent', 'string', [
-                'limit' => 100,
+            ->addColumn('agent', 'text', [
+                'limit' => \Phinx\Db\Adapter\MysqlAdapter::TEXT_LONG,
                 'null' => false
             ])
             ->addColumn('time', 'datetime', [
                 'null' => false
             ])
             ->addColumn('ip', 'string', [
-                'limit' => 40,
+                'limit' => 100,
                 'null' => false
             ])
             ->addIndex(['user_id'])
